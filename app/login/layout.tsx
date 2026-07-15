@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
 
-export default async function AdminLayout({
+export default async function LoginLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -12,8 +12,8 @@ export default async function AdminLayout({
     headers: await headers(),
   });
 
-  if (!session) {
-    redirect("/login");
+  if (session) {
+    redirect("/admin");
   }
 
   return <>{children}</>;
