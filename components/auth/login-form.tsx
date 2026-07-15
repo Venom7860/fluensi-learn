@@ -24,7 +24,7 @@ export default function LoginForm() {
         return;
       }
 
-      alert("Login successful!");
+      window.location.href = "/admin";
     } catch (err) {
       console.error(err);
       alert("Something went wrong.");
