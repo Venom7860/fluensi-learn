@@ -3,9 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
 
-import DashboardLayout from "@/components/admin/dashboard-layout";
-
-export default async function AdminLayout({
+export default async function StudentLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -14,19 +12,17 @@ export default async function AdminLayout({
     headers: await headers(),
   });
 
-  // Not logged in
   if (!session) {
     redirect("/login");
   }
 
-  // Logged in but not an admin
-  if (session.user.role !== "ADMIN") {
-    redirect("/student");
+  if (session.user.role !== "STUDENT") {
+    redirect("/admin");
   }
 
   return (
-    <DashboardLayout>
+    <div className="min-h-screen bg-gray-50">
       {children}
-    </DashboardLayout>
+    </div>
   );
 }

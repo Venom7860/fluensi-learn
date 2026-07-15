@@ -22,6 +22,13 @@ model User {
   role          Role     @default(STUDENT)
   isActive      Boolean  @default(true)
 
+  // Better Auth Admin Plugin
+  banned        Boolean  @default(false)
+  banReason     String?
+  banExpires    DateTime?
+
+  enrollments   Enrollment[]
+
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -74,4 +81,67 @@ model Verification {
 
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model Category {
+  id        String   @id @default(cuid())
+
+  name      String   @unique
+  slug      String   @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Course {
+  id            String   @id @default(cuid())
+
+  title         String
+
+  description   String?
+
+  isPublished   Boolean  @default(false)
+
+  classes       Class[]
+
+  enrollments   Enrollment[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Class {
+  id            String   @id @default(cuid())
+
+  title         String
+  description   String?
+
+  videoUrl      String?
+
+  pdfUrl        String?
+
+  order         Int      @default(1)
+
+  isPublished   Boolean  @default(false)
+
+  courseId      String
+
+  course        Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Enrollment {
+  id        String   @id @default(cuid())
+
+  studentId String
+  courseId  String
+
+  student   User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([studentId, courseId])
 }
